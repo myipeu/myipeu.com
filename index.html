@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyIP EU - What is my IP?</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#0f172a;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+.header{margin-top:30px;text-align:center}
+.logo{font-size:32px;font-weight:900}.logo span{color:#38bdf8}
+.subtitle{color:#94a3b8;margin-top:8px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:20px;padding:30px;width:100%;max-width:600px;margin-top:30px;text-align:center}
+.ip-label{color:#94a3b8;font-size:12px;letter-spacing:1.5px}
+.ip-address{font-size:38px;font-weight:800;margin:15px 0;word-break:break-all}
+.copy-btn{background:#38bdf8;color:#0f172a;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:25px;text-align:left}
+.box{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:15px}
+.box-label{color:#64748b;font-size:11px}
+.box-value{color:#e2e8f0;font-size:15px;font-weight:600;margin-top:6px}
+.footer{margin-top:40px;color:#475569;font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">MYIP<span>EU</span>.COM</div>
+<div class="subtitle">Your IP Address - Fast • Secure • Private</div>
+</div>
+<div class="card">
+<div class="ip-label">YOUR PUBLIC IP ADDRESS</div>
+<div class="ip-address" id="ip">Loading...</div>
+<button class="copy-btn" onclick="copyIP()">📋 Copy IP</button>
+<div class="grid">
+<div class="box"><div class="box-label">Location</div><div class="box-value" id="location">Detecting...</div></div>
+<div class="box"><div class="box-label">ISP</div><div class="box-value" id="isp">Detecting...</div></div>
+<div class="box"><div class="box-label">Country</div><div class="box-value" id="country">-</div></div>
+<div class="box"><div class="box-label">Timezone</div><div class="box-value" id="timezone">-</div></div>
+</div>
+</div>
+<div class="footer">© 2026 myipeu.com - No logs, no tracking, 100% free</div>
+<script>
+async function loadIP(){
+try{
+const r1=await fetch('https://api.ipify.org?format=json');const d1=await r1.json();document.getElementById('ip').textContent=d1.ip;
+const r2=await fetch('https://ipapi.co/'+d1.ip+'/json/');const d2=await r2.json();
+document.getElementById('location').textContent=(d2.city||'')+', '+(d2.region||'');
+document.getElementById('isp').textContent=d2.org||'Unknown';
+document.getElementById('country').textContent=d2.country_name||'-';
+document.getElementById('timezone').textContent=d2.timezone||'-';
+}catch(e){document.getElementById('ip').textContent='Unable to detect';}
+}
+function copyIP(){navigator.clipboard.writeText(document.getElementById('ip').textContent);alert('Copied!');}
+loadIP();
+</script>
+</body>
+</html>
